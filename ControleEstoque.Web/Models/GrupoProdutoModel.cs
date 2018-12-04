@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Models
 {
@@ -14,6 +15,7 @@ namespace ControleEstoque.Web.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage ="Preencha o nome.")]
+        
         public string Nome { get; set; }
         public bool Ativo { get; set; }
 
