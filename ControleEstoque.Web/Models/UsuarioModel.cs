@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace ControleEstoque.Web.Models
 {
@@ -49,8 +46,26 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
+        public static int RecuperarQuantidade()
+        {
+            var ret = 0;
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+                conexao.Open();
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = "select count(*) from usuario";
+                    ret = (int)comando.ExecuteScalar();
 
-        public static List<UsuarioModel> RecuperarLista()
+                }
+            }
+            return ret;
+        }
+
+
+        public static List<UsuarioModel> RecuperarLista(int pagina, int tamPagina)
         {
             var ret = new List<UsuarioModel>();
             using (var conexao = new SqlConnection())
@@ -59,8 +74,12 @@ namespace ControleEstoque.Web.Models
                 conexao.Open();
                 using (var comando = new SqlCommand())
                 {
+                    var pos = (pagina - 1) * tamPagina;
                     comando.Connection = conexao;
-                    comando.CommandText = "select * from usuario order by nome";
+                    comando.CommandText = string.Format(
+                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM usuario) " +
+                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1}",
+                        pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);                                                          
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
