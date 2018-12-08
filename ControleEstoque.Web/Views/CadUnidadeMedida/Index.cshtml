@@ -1,21 +1,20 @@
-﻿@model List<ControleEstoque.Web.Models.UsuarioModel>
+﻿@model List<ControleEstoque.Web.Models.UnidadeMedidaModel>
 @{
     Layout = "~/Views/Shared/_Cadastro.cshtml";
-    ViewBag.Title = "Usuário";
+    ViewBag.Title = "Unidade de Medida";
 }
 
 
 @section Styles{
     <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
-    <link href="~/Content/Cadastro/Usuario.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/UnidadeMedida.css" rel="stylesheet" />
 }
-
 @section TituloGrid{
     <th>Nome</th>
-    <th>Login</th>
+    <th>Sigla</th>
+    <th>Ativo</th>
     <th>Ação</th>
 }
-
 @section LinhaGrid{
     @{
         var linha = 0;
@@ -24,10 +23,12 @@
             linha++;
             if (linha <= ViewBag.QuantMaxLinhasPorPagina)
             {
-                
+                var ativo = (item.Ativo ? "SIM" : "NÃO");
+
     <tr data-id="@item.Id">
         <td>@item.Nome</td>
-        <td>@item.Login</td>
+        <td>@item.Sigla</td>
+        <td>@ativo</td>
 
         <td>
 
@@ -44,7 +45,6 @@
     }
 }
 
-
 @section CamposCadastro{
     <div class="row">
         <div class="form-group">
@@ -54,31 +54,29 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("txt_login", "Login", new { @class = "col-md-3 control-label" })
+            @Html.Label("txt_sigla", "Sigla", new { @class = "col-md-3 control-label" })
             <div class="col-md-9">
-                @Html.TextBox("txt_login", null, new { @class = "form-control" })
+                @Html.TextBox("txt_sigla", null, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("txt_senha", "Senha", new { @class = "col-md-3 control-label" })
+            @Html.Label("cbx_ativo", "Ativo", new { @class = "col-md-3 control-label" })
             <div class="col-md-9">
-                @Html.TextBox("txt_senha", null, new { @class = "form-control", type = "password" })
+                @Html.CheckBox("cbx_ativo")
             </div>
         </div>
-
     </div>
 }
-
 
 @section Scripts{
     <script src="~/Scripts/bootstrap-select.js"></script>
     <script>
         var tituloPagina = '@ViewBag.Title';
-        var url_excluir = '@Url.Action("ExcluirUsuario", "CadUsuario")';
-        var url_confirmar = '@Url.Action("SalvarUsuario", "CadUsuario")';
-        var url_page_click = '@Url.Action("UsuarioPagina", "CadUsuario")';
-        var url_tam_pag_change = '@Url.Action("UsuarioPagina", "CadUsuario")';
-        var url_alterar = '@Url.Action("RecuperarUsuario", "CadUsuario")';
+        var url_excluir = '@Url.Action("ExcluirUnidadeMedida", "CadUnidadeMedida")';
+        var url_confirmar = '@Url.Action("SalvarUnidadeMedida", "CadUnidadeMedida")';
+        var url_page_click = '@Url.Action("UnidadeMedidaPagina", "CadUnidadeMedida")';
+        var url_tam_pag_change = '@Url.Action("UnidadeMedidaPagina", "CadUnidadeMedida")';
+        var url_alterar = '@Url.Action("RecuperarUnidadeMedida", "CadUnidadeMedida")';
     </script>
-    <script src="~/Scripts/Cadastro/Usuario.js"></script>
+    <script src="~/Scripts/Cadastro/UnidadeMedida.js"></script>
 }

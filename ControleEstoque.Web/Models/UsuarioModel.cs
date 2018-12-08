@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
@@ -126,6 +127,10 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
+        internal static object RecuperarLista(object pagina, int v)
+        {
+            throw new NotImplementedException();
+        }
 
 
         public static bool ExcluirPeloId(int id)

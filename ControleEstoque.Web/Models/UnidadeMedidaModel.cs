@@ -6,17 +6,19 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Models
 {
-    public class GrupoProdutoModel
+    public class UnidadeMedidaModel
     {
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Preencha o nome.")]
-
         public string Nome { get; set; }
+
+        [Required(ErrorMessage = "Preencha a sigla.")]
+        public string Sigla { get; set; }
+
         public bool Ativo { get; set; }
 
         public static int RecuperarQuantidade()
@@ -29,7 +31,7 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select count(*) from grupo_produto";
+                    comando.CommandText = "select count(*) from unidade_medida";
                     ret = (int)comando.ExecuteScalar();
 
                 }
@@ -38,9 +40,9 @@ namespace ControleEstoque.Web.Models
         }
 
 
-        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina)
+        public static List<UnidadeMedidaModel> RecuperarLista(int pagina, int tamPagina)
         {
-            var ret = new List<GrupoProdutoModel>();
+            var ret = new List<UnidadeMedidaModel>();
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -57,7 +59,7 @@ namespace ControleEstoque.Web.Models
 
                     //gambiarra de um aluna
                     comando.CommandText = string.Format(
-                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM grupo_produto) " +
+                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM unidade_medida) " +
                         "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1}",
                         pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
 
@@ -65,10 +67,11 @@ namespace ControleEstoque.Web.Models
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        ret.Add(new GrupoProdutoModel
+                        ret.Add(new UnidadeMedidaModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
+                            Sigla = (string)reader["sigla"],
                             Ativo = (bool)reader["ativo"]
                         });
                     }
@@ -78,9 +81,11 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        public static GrupoProdutoModel RecuperarPeloId(int id)
+        
+
+        public static UnidadeMedidaModel RecuperarPeloId(int id)
         {
-            GrupoProdutoModel ret = null;
+            UnidadeMedidaModel ret = null;
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -88,16 +93,17 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select * from grupo_produto where (id = @id)";
+                    comando.CommandText = "select * from unidade_medida where (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.VarChar).Value = id;
 
                     var reader = comando.ExecuteReader();
                     if (reader.Read())
                     {
-                        ret = new GrupoProdutoModel
+                        ret = new UnidadeMedidaModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
+                            Sigla = (string)reader["sigla"],
                             Ativo = (bool)reader["ativo"]
                         };
                     }
@@ -125,7 +131,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "delete from grupo_produto where(id = @id)";
+                        comando.CommandText = "delete from unidade_medida where(id = @id)";
                         comando.Parameters.Add("@id", SqlDbType.VarChar).Value = id;
 
                         ret = (comando.ExecuteNonQuery() > 0);
@@ -155,16 +161,18 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     if (model == null)
                     {
-                        comando.CommandText = "insert into grupo_produto (nome, ativo) values (@nome,@ativo); select convert(int, scope_identity())";
+                        comando.CommandText = "insert into unidade_medida (nome, sigla, ativo) values (@nome,@sigla,@ativo); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@sigla", SqlDbType.VarChar).Value = this.Sigla;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
 
                         ret = ((int)comando.ExecuteScalar());
                     }
                     else
                     {
-                        comando.CommandText = "update grupo_produto set nome=@nome, ativo=@ativo where id = @id";
+                        comando.CommandText = "update unidade_medida set nome=@nome, sigla=@sigla, ativo=@ativo where id = @id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@sigla", SqlDbType.VarChar).Value = this.Sigla;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
                         comando.Parameters.Add("@id", SqlDbType.VarChar).Value = this.Id;
 

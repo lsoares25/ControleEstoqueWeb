@@ -10,9 +10,8 @@ function set_focus_form() {
 }
 
 function set_dados_grid(dados) {
-    return
-        '<td>' + dados.Nome + '</td>' +
-        '<td>' + (dados.Ativo ? 'SIM' : 'NÃO') + '</td>';
+    return  '<td>' + dados.Nome + '</td>' +
+            '<td>' + (dados.Ativo ? 'SIM' : 'NÃO') + '</td>';
 }
 
 function get_dados_inclusao() {
