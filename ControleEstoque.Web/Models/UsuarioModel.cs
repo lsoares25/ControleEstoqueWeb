@@ -10,13 +10,13 @@ namespace ControleEstoque.Web.Models
     public class UsuarioModel
     {
         public int Id { get; set; }
-        [Required(ErrorMessage ="Informe o login")]
+        [Required(ErrorMessage = "Informe o login")]
         public string Login { get; set; }
         [Required(ErrorMessage = "Informe a senha")]
         public string Senha { get; set; }
         [Required(ErrorMessage = "Informe o nome")]
         public string Nome { get; set; }
-      
+
 
         public static UsuarioModel ValidarUsuario(string login, string senha)
         {
@@ -31,9 +31,9 @@ namespace ControleEstoque.Web.Models
                     comando.CommandText = "select * from usuario where login=@login and senha=@senha";
                     comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
                     comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(senha);
-                    
+
                     var reader = comando.ExecuteReader();
-                    if(reader.Read())
+                    if (reader.Read())
                     {
                         ret = new UsuarioModel
                         {
@@ -41,7 +41,7 @@ namespace ControleEstoque.Web.Models
                             Login = (string)reader["login"],
                             Senha = (string)reader["senha"],
                             Nome = (string)reader["nome"]
-                            
+
                         };
                     }
                 }
@@ -68,7 +68,7 @@ namespace ControleEstoque.Web.Models
         }
 
 
-        public static List<UsuarioModel> RecuperarLista(int pagina, int tamPagina)
+        public static List<UsuarioModel> RecuperarLista(int pagina = -1, int tamPagina = -1)
         {
             var ret = new List<UsuarioModel>();
             using (var conexao = new SqlConnection())
@@ -79,10 +79,18 @@ namespace ControleEstoque.Web.Models
                 {
                     var pos = (pagina - 1) * tamPagina;
                     comando.Connection = conexao;
-                    comando.CommandText = string.Format(
-                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM usuario) " +
-                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1}",
-                        pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);                                                          
+
+                    if (pagina == -1 || tamPagina == -1)
+                    {
+                        comando.CommandText = "SELECT * FROM usuario order by nome";
+                    }
+                    else
+                    {
+                        comando.CommandText = string.Format(
+                            "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM usuario) " +
+                            "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1}",
+                            pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
+                    }
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
@@ -91,7 +99,7 @@ namespace ControleEstoque.Web.Models
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
                             Login = (string)reader["login"]
-                           
+
                         });
                     }
 
@@ -122,7 +130,7 @@ namespace ControleEstoque.Web.Models
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
                             Login = (string)reader["login"]
-                            
+
                         };
                     }
 
@@ -184,7 +192,7 @@ namespace ControleEstoque.Web.Models
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
                         comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
-                       
+
 
                         ret = ((int)comando.ExecuteScalar());
                     }
@@ -192,13 +200,13 @@ namespace ControleEstoque.Web.Models
                     {
                         comando.CommandText =
                             "update usuario set nome=@nome, login=@login" +
-                            (!string.IsNullOrEmpty(this.Senha)?", senha=@senha":"") +
+                            (!string.IsNullOrEmpty(this.Senha) ? ", senha=@senha" : "") +
                             " where id = @id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
-                        
+
                         if (!string.IsNullOrEmpty(this.Senha))
-                        { 
+                        {
                             comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
                         }
                         comando.Parameters.Add("@id", SqlDbType.VarChar).Value = this.Id;
@@ -234,8 +242,8 @@ namespace ControleEstoque.Web.Models
                     comando.Parameters.Add("@id_usuario", SqlDbType.Int).Value = this.Id;
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
-                    {                       
-                        ret += (ret != string.Empty ? ";": string.Empty) + (string)reader["nome"];                                             
+                    {
+                        ret += (ret != string.Empty ? ";" : string.Empty) + (string)reader["nome"];
                     }
 
                 }
