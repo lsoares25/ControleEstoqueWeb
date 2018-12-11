@@ -2,59 +2,58 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Controllers.Cadastro
 {
-
     [Authorize(Roles = "Gerente,Administrativo,Operador")]
-    public class CadGrupoProdutoController : Controller
+    public class CadLocalArmazenamentoController : Controller
     {
-
         private const int _quantMaxLinhasPorPagina = 5;
 
         public ActionResult Index()
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20}, _quantMaxLinhasPorPagina);
+            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = GrupoProdutoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
-            var quant = GrupoProdutoModel.RecuperarQuantidade();
+            var lista = LocalArmazenamentoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var quant = LocalArmazenamentoModel.RecuperarQuantidade();
 
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1:0;
+            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
-            
+
             return View(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GrupoProdutoPagina(int pagina, int tamPag, string filtro)
+        public JsonResult LocalArmazenamentoPagina(int pagina, int tamPag)
         {
-            var lista = GrupoProdutoModel.RecuperarLista(pagina, tamPag, filtro);
-           
+            var lista = LocalArmazenamentoModel.RecuperarLista(pagina, tamPag);
+
             return Json(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult RecuperarGrupoProduto(int id)
+        public JsonResult RecuperarLocalArmazenamento(int id)
         {
-            return Json(GrupoProdutoModel.RecuperarPeloId(id));
+            return Json(LocalArmazenamentoModel.RecuperarPeloId(id));
         }
 
         [HttpPost]
         [Authorize(Roles = "Gerente,Administrativo")]
         [ValidateAntiForgeryToken]
-        public JsonResult ExcluirGrupoProduto(int id)
+        public JsonResult ExcluirLocalArmazenamento(int id)
         {
-            return Json(GrupoProdutoModel.ExcluirPeloId(id));
+            return Json(LocalArmazenamentoModel.ExcluirPeloId(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarGrupoProduto(GrupoProdutoModel model)
+        public JsonResult SalvarLocalArmazenamento(LocalArmazenamentoModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
@@ -86,6 +85,5 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             }
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
-
     }
 }

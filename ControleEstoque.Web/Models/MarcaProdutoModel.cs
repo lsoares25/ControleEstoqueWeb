@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Models
 {
-    public class GrupoProdutoModel
+    public class MarcaProdutoModel
     {
         public int Id { get; set; }
 
@@ -29,7 +29,7 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select count(*) from grupo_produto";
+                    comando.CommandText = "select count(*) from marca_produto";
                     ret = (int)comando.ExecuteScalar();
 
                 }
@@ -38,9 +38,9 @@ namespace ControleEstoque.Web.Models
         }
 
 
-        public static List<GrupoProdutoModel> RecuperarLista(int pagina, int tamPagina, string filtro = "")
+        public static List<MarcaProdutoModel> RecuperarLista(int pagina, int tamPagina)
         {
-            var ret = new List<GrupoProdutoModel>();
+            var ret = new List<MarcaProdutoModel>();
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -48,12 +48,6 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     var pos = (pagina - 1) * tamPagina;
-                    var filtroWhere = "";
-                    if (!string.IsNullOrEmpty(filtro))
-                    {
-                        filtroWhere = string.IsNullOrEmpty(filtro) ? "" : string.Format(" and lower(nome) like '%{0}%'", filtro.ToLower());
-                    }
-                    
                     comando.Connection = conexao;
 
                     //este comando (offset) nao esta funcionando no sql 2008, somente no 2012 em diante
@@ -63,15 +57,15 @@ namespace ControleEstoque.Web.Models
 
                     //gambiarra de um aluna
                     comando.CommandText = string.Format(
-                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM grupo_produto) " +
-                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1} " + filtroWhere ,
+                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM marca_produto) " +
+                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1}",
                         pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
 
 
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        ret.Add(new GrupoProdutoModel
+                        ret.Add(new MarcaProdutoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
@@ -84,9 +78,9 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        public static GrupoProdutoModel RecuperarPeloId(int id)
+        public static MarcaProdutoModel RecuperarPeloId(int id)
         {
-            GrupoProdutoModel ret = null;
+            MarcaProdutoModel ret = null;
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
@@ -94,13 +88,13 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select * from grupo_produto where (id = @id)";
+                    comando.CommandText = "select * from marca_produto where (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.VarChar).Value = id;
 
                     var reader = comando.ExecuteReader();
                     if (reader.Read())
                     {
-                        ret = new GrupoProdutoModel
+                        ret = new MarcaProdutoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
@@ -113,10 +107,6 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        //internal static object RecuperarLista(object pagina, int v)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public static bool ExcluirPeloId(int id)
         {
@@ -131,7 +121,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "delete from grupo_produto where(id = @id)";
+                        comando.CommandText = "delete from marca_produto where(id = @id)";
                         comando.Parameters.Add("@id", SqlDbType.VarChar).Value = id;
 
                         ret = (comando.ExecuteNonQuery() > 0);
@@ -161,7 +151,7 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     if (model == null)
                     {
-                        comando.CommandText = "insert into grupo_produto (nome, ativo) values (@nome,@ativo); select convert(int, scope_identity())";
+                        comando.CommandText = "insert into marca_produto (nome, ativo) values (@nome,@ativo); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
 
@@ -169,7 +159,7 @@ namespace ControleEstoque.Web.Models
                     }
                     else
                     {
-                        comando.CommandText = "update grupo_produto set nome=@nome, ativo=@ativo where id = @id";
+                        comando.CommandText = "update marca_produto set nome=@nome, ativo=@ativo where id = @id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
                         comando.Parameters.Add("@id", SqlDbType.VarChar).Value = this.Id;
