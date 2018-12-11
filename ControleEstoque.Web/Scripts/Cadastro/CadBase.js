@@ -62,7 +62,10 @@ $(document).on('click', '#btn_incluir', function () {
             if (response) {
                 abrir_form(response);
             }
-        });
+        })
+            .fail(function () {
+                swal('Aviso', 'Não foi possível recuperar as informações. Tente novamente em instantes.', 'warning');
+            });
     })
     .on('click', '.btn-excluir', function () {
         var btn = $(this),
@@ -95,7 +98,10 @@ $(document).on('click', '#btn_incluir', function () {
                                 $('#mensagem_grid').removeClass('invisivel');
                             }
                         }
-                    });
+                    })
+                        .fail(function () {
+                            swal('Aviso', 'Não foi possível excluir. Tente novamente em instantes.', 'warning');
+                        });
                 }
             }
         });
@@ -135,6 +141,9 @@ $(document).on('click', '#btn_incluir', function () {
                 $('#msg_erro').hide();
             }
         })
+            .fail(function () {
+                swal('Aviso', 'Não foi possível salvar. Tente novamente em instantes.', 'warning');
+            });
     })
     .on('click', '.page-item', function () {
         var btn = $(this),
@@ -164,7 +173,10 @@ $(document).on('click', '#btn_incluir', function () {
                 btn.siblings().removeClass('active');
                 btn.addClass('active');
             }
-        });
+        })
+            .fail(function () {
+                swal('Aviso', 'Não foi possível recuperar as informações. Tente novamente em instantes.', 'warning');
+            });
     })
     .on('change', '#ddl_tam_pag', function () {
         var ddl = $(this),
@@ -194,38 +206,44 @@ $(document).on('click', '#btn_incluir', function () {
                 ddl.siblings().removeClass('active');
                 ddl.addClass('active');
             }
-        });
+        })
+            .fail(function () {
+                swal('Aviso', 'Não foi possível recuperar as informações. Tente novamente em instantes.', 'warning');
+            });
     })
 
     .on('keyup', '#txt_filtro', function () {
-    var filtro = $(this),
-        ddl = $('#ddl_tam_pag'),
-        tamPag = ddl.val(),
-        pagina = 1,
-        url = url_filtro_change,
-        param = { 'pagina': pagina, 'tamPag': tamPag, 'filtro': filtro.val() };
+        var filtro = $(this),
+            ddl = $('#ddl_tam_pag'),
+            tamPag = ddl.val(),
+            pagina = 1,
+            url = url_filtro_change,
+            param = { 'pagina': pagina, 'tamPag': tamPag, 'filtro': filtro.val() };
 
-    $.post(url, add_anti_forgery_token(param), function (response) {
-        if (response) {
-            var table = $('#grid_cadastro').find('tbody');
+        $.post(url, add_anti_forgery_token(param), function (response) {
+            if (response) {
+                var table = $('#grid_cadastro').find('tbody');
 
-            table.empty();
-            if (response.length > 0) {
-                $('#grid_cadastro').removeClass('invisivel');
-                $('#mensagem_grid').addClass('invisivel');
+                table.empty();
+                if (response.length > 0) {
+                    $('#grid_cadastro').removeClass('invisivel');
+                    $('#mensagem_grid').addClass('invisivel');
 
-                for (var i = 0; i < response.length; i++) {
-                    table.append(criar_linha_grid(response[i]));
+                    for (var i = 0; i < response.length; i++) {
+                        table.append(criar_linha_grid(response[i]));
+                    }
                 }
+                else {
+                    $('#grid_cadastro').addClass('invisivel');
+                    $('#mensagem_grid').removeClass('invisivel');
+                }
+                ddl.siblings().removeClass('active');
+                ddl.addClass('active');
             }
-            else {
-                $('#grid_cadastro').addClass('invisivel');
-                $('#mensagem_grid').removeClass('invisivel');
-            }
-            ddl.siblings().removeClass('active');
-            ddl.addClass('active');
-        }
+        })
+        .fail(function () {
+            swal('Aviso', 'Não foi possível recuperar as informações. Tente novamente em instantes.', 'warning');
+        });
     });
-});
 
 

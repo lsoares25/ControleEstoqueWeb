@@ -41,6 +41,7 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         [ValidateAntiForgeryToken]
         public JsonResult RecuperarGrupoProduto(int id)
         {
+            //throw new Exception(); codigo para forçar erro
             return Json(GrupoProdutoModel.RecuperarPeloId(id));
         }
 
