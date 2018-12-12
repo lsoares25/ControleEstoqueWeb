@@ -14,7 +14,7 @@ namespace ControleEstoque.Web.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Preencha o nome.")]
-
+        [MaxLength(30, ErrorMessage = "O nome da cidade pode ter no máximo 30 caracteres.")]
         public string Nome { get; set; }
 
         public int Id_estado { get; set; }
@@ -69,9 +69,9 @@ namespace ControleEstoque.Web.Models
                         ret.Add(new CidadeModel
                         {
                             Id = (int)reader["id"],
-                            Nome = (string)reader["nome"],
-                            Id_estado = (int)reader["id_estado"],
-                            Ativo = (bool)reader["ativo"]
+                            Nome = (string)reader["nome"],                            
+                            Ativo = (bool)reader["ativo"],
+                            Id_estado = (int)reader["id_estado"]
                         });
                     }
 
@@ -99,9 +99,9 @@ namespace ControleEstoque.Web.Models
                         ret = new CidadeModel
                         {
                             Id = (int)reader["id"],
-                            Nome = (string)reader["nome"],
-                            Id_estado = (int)reader["id_estado"],
-                            Ativo = (bool)reader["ativo"]
+                            Nome = (string)reader["nome"],                            
+                            Ativo = (bool)reader["ativo"],
+                            Id_estado = (int)reader["id_estado"]
                         };
                     }
 

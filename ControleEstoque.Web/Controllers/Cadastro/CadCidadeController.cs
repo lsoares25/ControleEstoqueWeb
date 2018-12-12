@@ -42,7 +42,6 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         [ValidateAntiForgeryToken]
         public JsonResult RecuperarCidade(int id)
         {
-            //throw new Exception(); codigo para forçar erro
             return Json(CidadeModel.RecuperarPeloId(id));
         }
 
