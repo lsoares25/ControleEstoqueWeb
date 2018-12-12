@@ -127,12 +127,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CadastroController.cs" />
+    <Compile Include="Controllers\Cadastro\CadCidadeController.cs" />
     <Compile Include="Controllers\Cadastro\CadGrupoProdutoController.cs" />
     <Compile Include="Controllers\Cadastro\CadLocalArmazenamentoController.cs" />
     <Compile Include="Controllers\Cadastro\CadMarcaProdutoController.cs" />
+    <Compile Include="Controllers\Cadastro\CadPaisController.cs" />
     <Compile Include="Controllers\Cadastro\CadPerfilController.cs" />
     <Compile Include="Controllers\Cadastro\CadUnidadeMedidaController.cs" />
     <Compile Include="Controllers\Cadastro\CadUsuarioController.cs" />
+    <Compile Include="Controllers\Cadastro\CadEstadoController.cs" />
     <Compile Include="Controllers\ContaController.cs" />
     <Compile Include="Controllers\GraficoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -142,9 +145,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CriptoHelper.cs" />
+    <Compile Include="Models\CidadeModel.cs" />
+    <Compile Include="Models\EstadoModel.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
     <Compile Include="Models\LocalArmazenamentoModel.cs" />
     <Compile Include="Models\MarcaProdutoModel.cs" />
+    <Compile Include="Models\PaisModel.cs" />
     <Compile Include="Models\PerfilModel.cs" />
     <Compile Include="Models\UnidadeMedidaModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
@@ -158,9 +164,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Cadastro\Cidade.css" />
+    <Content Include="Content\Cadastro\Estado.css" />
     <Content Include="Content\Cadastro\GrupoProduto.css" />
     <Content Include="Content\Cadastro\LocalArmazenamento.css" />
     <Content Include="Content\Cadastro\MarcaProduto.css" />
+    <Content Include="Content\Cadastro\Pais.css" />
     <Content Include="Content\Cadastro\Perfil.css" />
     <Content Include="Content\Cadastro\UnidadeMedida.css" />
     <Content Include="Content\Cadastro\Usuario.css" />
@@ -178,9 +187,12 @@
     <Content Include="Content\bootstrap-select.css.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\Cadastro\CadBase.js" />
+    <Content Include="Scripts\Cadastro\Cidade.js" />
+    <Content Include="Scripts\Cadastro\Estado.js" />
     <Content Include="Scripts\Cadastro\GrupoProduto.js" />
     <Content Include="Scripts\Cadastro\LocalArmazenamento.js" />
     <Content Include="Scripts\Cadastro\MarcaProduto.js" />
+    <Content Include="Scripts\Cadastro\Pais.js" />
     <Content Include="Scripts\Cadastro\Perfil.js" />
     <Content Include="Scripts\Cadastro\UnidadeMedida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
@@ -210,13 +222,8 @@
     <Content Include="Views\Home\Sobre.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\CadGrupoProduto\Index.cshtml" />
-    <Content Include="Views\Cadastro\MarcaProduto.cshtml" />
     <Content Include="Views\Cadastro\Fornecedor.cshtml" />
-    <Content Include="Views\Cadastro\Cidade.cshtml" />
-    <Content Include="Views\Cadastro\Estado.cshtml" />
-    <Content Include="Views\Cadastro\Pais.cshtml" />
     <Content Include="Views\Cadastro\Produto.cshtml" />
-    <Content Include="Views\Cadastro\LocalProduto.cshtml" />
     <Content Include="Views\CadUsuario\Index.cshtml" />
     <Content Include="Views\Grafico\PerdaMes.cshtml" />
     <Content Include="Views\Grafico\EntradaSaidaMes.cshtml" />
@@ -232,6 +239,9 @@
     <Content Include="Views\CadPerfil\Index.cshtml" />
     <Content Include="Views\CadLocalArmazenamento\Index.cshtml" />
     <Content Include="Views\CadMarcaProduto\Index.cshtml" />
+    <Content Include="Views\CadCidade\Index.cshtml" />
+    <Content Include="Views\CadEstado\Index.cshtml" />
+    <Content Include="Views\CadPais\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
