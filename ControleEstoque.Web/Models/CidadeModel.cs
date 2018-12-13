@@ -40,7 +40,7 @@ namespace ControleEstoque.Web.Models
         }
 
 
-        public static List<CidadeModel> RecuperarLista(int pagina, int tamPagina, string filtro = "")
+        public static List<CidadeModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", int idEstado = 0)
         {
             var ret = new List<CidadeModel>();
             using (var conexao = new SqlConnection())
@@ -50,18 +50,32 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     var pos = (pagina - 1) * tamPagina;
+
                     var filtroWhere = "";
                     if (!string.IsNullOrEmpty(filtro))
                     {
-                        filtroWhere = string.IsNullOrEmpty(filtro) ? "" : string.Format(" and lower(nome) like '%{0}%'", filtro.ToLower());
+                        filtroWhere = string.Format(" and (lower(nome) like '%{0}%') and ", filtro.ToLower());
+                    }
+                    if (idEstado > 0)
+                    {
+                        filtroWhere += string.Format(" (id_estado = {0})", idEstado);
+                    }
+
+                    var paginacao = "";
+                    if (pagina > 0 && tamPagina > 0)
+                    {
+                        // comando.CommandText = string.Format(
+                        //"WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM estado) " +
+                        //"SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1} " + filtroWhere,
+                        //pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
+                        comando.CommandText = string.Format(
+                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM cidade) " +
+                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1} " + filtroWhere,
+                         pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
                     }
 
                     comando.Connection = conexao;
-                    comando.CommandText = string.Format(
-                        "WITH Linha AS  (SELECT *, ROW_NUMBER() OVER(ORDER BY nome) AS LinhaNumero FROM cidade) " +
-                        "SELECT * FROM Linha WHERE LinhaNumero BETWEEN {0} AND {1} " + filtroWhere,
-                        pos > 0 ? pos + 1 : 0, pos > 0 ? (tamPagina * pagina) : tamPagina);
-
+                    comando.CommandText = "select * from cidade " + filtroWhere + "order by nome " + paginacao;
 
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
@@ -69,7 +83,7 @@ namespace ControleEstoque.Web.Models
                         ret.Add(new CidadeModel
                         {
                             Id = (int)reader["id"],
-                            Nome = (string)reader["nome"],                            
+                            Nome = (string)reader["nome"],
                             Ativo = (bool)reader["ativo"],
                             Id_estado = (int)reader["id_estado"]
                         });
@@ -99,7 +113,7 @@ namespace ControleEstoque.Web.Models
                         ret = new CidadeModel
                         {
                             Id = (int)reader["id"],
-                            Nome = (string)reader["nome"],                            
+                            Nome = (string)reader["nome"],
                             Ativo = (bool)reader["ativo"],
                             Id_estado = (int)reader["id_estado"]
                         };

@@ -8,8 +8,9 @@ using System.Web.Mvc;
 namespace ControleEstoque.Web.Controllers.Cadastro
 {
     [Authorize(Roles = "Gerente,Administrativo,Operador")]
-    public class CadCidadeController : Controller
+    public class CadFornecedorController : Controller
     {
+
         private const int _quantMaxLinhasPorPagina = 5;
 
         public ActionResult Index()
@@ -18,53 +19,46 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = CidadeModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
-            var quant = CidadeModel.RecuperarQuantidade();
+            var lista = FornecedorModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var quant = FornecedorModel.RecuperarQuantidade();
 
             var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
             ViewBag.Paises = PaisModel.RecuperarLista();
-            
+           
 
             return View(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CidadePagina(int pagina, int tamPag, string filtro)
+        public JsonResult FornecedorPagina(int pagina, int tamPag, string filtro)
         {
-            var lista = CidadeModel.RecuperarLista(pagina, tamPag, filtro);
+            var lista = FornecedorModel.RecuperarLista(pagina, tamPag, filtro);
 
             return Json(lista);
         }
 
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult RecuperarCidade(int id)
+        public JsonResult RecuperarFornecedor(int id)
         {
-            return Json(CidadeModel.RecuperarPeloId(id));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult RecuperarCidadeDoEstado(int idEstado)
-        {
-            var lista = CidadeModel.RecuperarLista(idEstado: idEstado);
-
-            return Json(lista);
+            //throw new Exception(); codigo para forçar erro
+            return Json(FornecedorModel.RecuperarPeloId(id));
         }
 
         [HttpPost]
         [Authorize(Roles = "Gerente,Administrativo")]
         [ValidateAntiForgeryToken]
-        public JsonResult ExcluirCidade(int id)
+        public JsonResult ExcluirFornecedor(int id)
         {
-            return Json(CidadeModel.ExcluirPeloId(id));
+            return Json(FornecedorModel.ExcluirPeloId(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarCidade(CidadeModel model)
+        public JsonResult SalvarFornecedor(FornecedorModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
@@ -98,4 +92,5 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         }
 
     }
+
 }
