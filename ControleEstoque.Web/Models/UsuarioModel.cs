@@ -250,5 +250,36 @@ namespace ControleEstoque.Web.Models
             }
             return ret;
         }
+
+
+        public bool ValidarSenhaAtual(string senhaAtual)
+        {
+            var ret = false;
+
+            using (var db = new ContextoBD())
+            {
+                ret = db.Usuarios
+                    .Where(x => x.Senha == senhaAtual && x.Id == this.Id)
+                    .Any();
+            }
+
+            return ret;
+        }
+
+        public bool AlterarSenha(string novaSenha)
+        {
+            var ret = false;
+
+            using (var db = new ContextoBD())
+            {
+                this.Senha = CriptoHelper.HashMD5(novaSenha);
+                db.Usuarios.Attach(this);
+                db.Entry(this).Property(x => x.Senha).IsModified = true;
+                db.SaveChanges();
+            }
+
+            return ret;
+        }
+
     }
 }
