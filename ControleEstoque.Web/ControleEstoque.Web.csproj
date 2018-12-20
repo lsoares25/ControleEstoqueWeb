@@ -127,6 +127,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AutoMapper\AutoMapperConfig.cs" />
+    <Compile Include="AutoMapper\AutoMapperProfile.cs" />
     <Compile Include="Controllers\CadastroController.cs" />
     <Compile Include="Controllers\Cadastro\CadCidadeController.cs" />
     <Compile Include="Controllers\Cadastro\CadFornecedorController.cs" />
@@ -135,6 +137,7 @@
     <Compile Include="Controllers\Cadastro\CadMarcaProdutoController.cs" />
     <Compile Include="Controllers\Cadastro\CadPaisController.cs" />
     <Compile Include="Controllers\Cadastro\CadPerfilController.cs" />
+    <Compile Include="Controllers\Cadastro\CadProdutoController.cs" />
     <Compile Include="Controllers\Cadastro\CadUnidadeMedidaController.cs" />
     <Compile Include="Controllers\Cadastro\CadUsuarioController.cs" />
     <Compile Include="Controllers\Cadastro\CadEstadoController.cs" />
@@ -149,13 +152,16 @@
     <Compile Include="Helpers\CriptoHelper.cs" />
     <Compile Include="Models\AlteracaoSenhaUsuarioViewModel.cs" />
     <Compile Include="Models\CidadeModel.cs" />
+    <Compile Include="Models\EsqueciMinhaSenhaViewModel.cs" />
     <Compile Include="Models\EstadoModel.cs" />
     <Compile Include="Models\FornecedorModel.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
     <Compile Include="Models\LocalArmazenamentoModel.cs" />
     <Compile Include="Models\MarcaProdutoModel.cs" />
+    <Compile Include="Models\NovaSenhaViewModel.cs" />
     <Compile Include="Models\PaisModel.cs" />
     <Compile Include="Models\PerfilModel.cs" />
+    <Compile Include="Models\ProdutoModel.cs" />
     <Compile Include="Models\Tipos.cs" />
     <Compile Include="Models\UnidadeMedidaModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
@@ -177,8 +183,10 @@
     <Content Include="Content\Cadastro\MarcaProduto.css" />
     <Content Include="Content\Cadastro\Pais.css" />
     <Content Include="Content\Cadastro\Perfil.css" />
+    <Content Include="Content\Cadastro\Produto.css" />
     <Content Include="Content\Cadastro\UnidadeMedida.css" />
     <Content Include="Content\Cadastro\Usuario.css" />
+    <Content Include="Content\Imagens\logo.png" />
     <Content Include="Content\sweetalert2.css" />
     <Content Include="Content\sweetalert2.min.css" />
     <Content Include="favicon.ico" />
@@ -201,6 +209,7 @@
     <Content Include="Scripts\Cadastro\MarcaProduto.js" />
     <Content Include="Scripts\Cadastro\Pais.js" />
     <Content Include="Scripts\Cadastro\Perfil.js" />
+    <Content Include="Scripts\Cadastro\Produto.js" />
     <Content Include="Scripts\Cadastro\UnidadeMedida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -219,7 +228,9 @@
     <Content Include="Scripts\mustache.min.js" />
     <Content Include="Scripts\sweetalert2.js" />
     <Content Include="Scripts\sweetalert2.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -233,8 +244,6 @@
     <Content Include="Views\Home\Sobre.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\CadGrupoProduto\Index.cshtml" />
-    <Content Include="Views\Cadastro\Fornecedor.cshtml" />
-    <Content Include="Views\Cadastro\Produto.cshtml" />
     <Content Include="Views\CadUsuario\Index.cshtml" />
     <Content Include="Views\Grafico\PerdaMes.cshtml" />
     <Content Include="Views\Grafico\EntradaSaidaMes.cshtml" />
@@ -255,6 +264,9 @@
     <Content Include="Views\CadPais\Index.cshtml" />
     <Content Include="Views\CadFornecedor\Index.cshtml" />
     <Content Include="Views\Conta\AlterarSenhaUsuario.cshtml" />
+    <Content Include="Views\Conta\EsqueciMinhaSenha.cshtml" />
+    <Content Include="Views\Conta\RedefinirSenha.cshtml" />
+    <Content Include="Views\CadProduto\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,9 +14,11 @@ namespace ControleEstoque.Web.Models
         public string Login { get; set; }
         [Required(ErrorMessage = "Informe a senha")]
         public string Senha { get; set; }
+        [Required(ErrorMessage = "Informe o E-mail")]
+        public string Email { get; set; }
         [Required(ErrorMessage = "Informe o nome")]
         public string Nome { get; set; }
-
+     
 
         public static UsuarioModel ValidarUsuario(string login, string senha)
         {
@@ -40,7 +42,8 @@ namespace ControleEstoque.Web.Models
                             Id = (int)reader["id"],
                             Login = (string)reader["login"],
                             Senha = (string)reader["senha"],
-                            Nome = (string)reader["nome"]
+                            Nome = (string)reader["nome"],
+                            Email = (string)reader["email"]
 
                         };
                     }
@@ -98,7 +101,8 @@ namespace ControleEstoque.Web.Models
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Login = (string)reader["login"]
+                            Login = (string)reader["login"],
+                            Email = (string)reader["email"]
 
                         });
                     }
@@ -129,7 +133,39 @@ namespace ControleEstoque.Web.Models
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Login = (string)reader["login"]
+                            Login = (string)reader["login"],
+                            Email = (string)reader["email"]
+
+                        };
+                    }
+
+                }
+            }
+            return ret;
+        }
+
+        public static UsuarioModel RecuperarPeloLogin(string login)
+        {
+            UsuarioModel ret = null;
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
+                conexao.Open();
+                using (var comando = new SqlCommand())
+                {
+                    comando.Connection = conexao;
+                    comando.CommandText = "select * from usuario where (login = @login)";
+                    comando.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
+
+                    var reader = comando.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        ret = new UsuarioModel
+                        {
+                            Id = (int)reader["id"],
+                            Nome = (string)reader["nome"],
+                            Login = (string)reader["login"],
+                            Email = (string)reader["email"]
 
                         };
                     }
@@ -188,8 +224,9 @@ namespace ControleEstoque.Web.Models
                     comando.Connection = conexao;
                     if (model == null)
                     {
-                        comando.CommandText = "insert into usuario (nome, login, senha) values (@nome,@login,@senha); select convert(int, scope_identity())";
+                        comando.CommandText = "insert into usuario (nome, email, login, senha) values (@nome,@email,@login,@senha); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@email", SqlDbType.VarChar).Value = this.Email;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
                         comando.Parameters.Add("@senha", SqlDbType.VarChar).Value = CriptoHelper.HashMD5(this.Senha);
 
@@ -199,10 +236,11 @@ namespace ControleEstoque.Web.Models
                     else
                     {
                         comando.CommandText =
-                            "update usuario set nome=@nome, login=@login" +
+                            "update usuario set nome=@nome, email=@email, login=@login" +
                             (!string.IsNullOrEmpty(this.Senha) ? ", senha=@senha" : "") +
                             " where id = @id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
+                        comando.Parameters.Add("@email", SqlDbType.VarChar).Value = this.Email;
                         comando.Parameters.Add("@login", SqlDbType.VarChar).Value = this.Login;
 
                         if (!string.IsNullOrEmpty(this.Senha))

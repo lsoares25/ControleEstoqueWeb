@@ -50,27 +50,30 @@
 }
 
 
-@section CamposCadastro{
+@section CamposCadastro {
     <div class="row">
-        <div class="form-group">
-            @Html.Label("txt_nome", "Nome", new { @class = "col-md-3 control-label" })
-            <div class="col-md-9">
-                @Html.TextBox("txt_nome", null, new { @class = "form-control" })
-            </div>
+        <div class="col-md-12">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
         </div>
-        <div class="form-group">
-            @Html.Label("txt_login", "Login", new { @class = "col-md-3 control-label" })
-            <div class="col-md-9">
-                @Html.TextBox("txt_login", null, new { @class = "form-control" })
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_email", "E-mail", new { @class = "control-label" })
+            @Html.TextBox("txt_email", null, new { @class = "form-control" })
         </div>
-        <div class="form-group">
-            @Html.Label("txt_senha", "Senha", new { @class = "col-md-3 control-label" })
-            <div class="col-md-9">
-                @Html.TextBox("txt_senha", null, new { @class = "form-control", type = "password" })
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_login", "Login", new { @class = "control-label" })
+            @Html.TextBox("txt_login", null, new { @class = "form-control" })
         </div>
-       
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_senha", "Senha", new { @class = "control-label" })
+            @Html.TextBox("txt_senha", null, new { @class = "form-control", type = "password" })
+        </div>
     </div>
 }
 
