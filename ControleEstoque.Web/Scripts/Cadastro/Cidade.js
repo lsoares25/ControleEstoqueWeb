@@ -5,16 +5,11 @@
     $('#cbx_ativo').prop('checked', dados.Ativo);
 
     $('#ddl_estado').val(dados.IdEstado);
-    $('#ddl_estado').prop('disabled', dados.IdEstado <= 0 || dados.IdEstado == undefined);    
+    $('#ddl_estado').prop('disabled', dados.IdEstado <= 0 || dados.IdEstado == undefined);
 }
 
 function set_focus_form() {
     $('#txt_nome').focus();
-}
-
-function set_dados_grid(dados) {
-    return '<td>' + dados.Nome + '</td>' +
-        '<td>' + (dados.Ativo ? 'SIM' : 'NÃO') + '</td>';
 }
 
 function get_dados_inclusao() {
@@ -65,4 +60,3 @@ $(document).on('change', '#ddl_pais', function () {
         });
     }
 });
-

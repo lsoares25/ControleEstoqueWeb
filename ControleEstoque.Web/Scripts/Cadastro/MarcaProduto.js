@@ -4,14 +4,8 @@
     $('#cbx_ativo').prop('checked', dados.Ativo);
 }
 
-
 function set_focus_form() {
     $('#txt_nome').focus();
-}
-
-function set_dados_grid(dados) {
-    return '<td>' + dados.Nome + '</td>' +
-        '<td>' + (dados.Ativo ? 'SIM' : 'NÃO') + '</td>';
 }
 
 function get_dados_inclusao() {
@@ -35,4 +29,3 @@ function preencher_linha_grid(param, linha) {
         .eq(0).html(param.Nome).end()
         .eq(1).html(param.Ativo ? 'SIM' : 'NÃO');
 }
-

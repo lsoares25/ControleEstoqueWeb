@@ -129,7 +129,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AutoMapper\AutoMapperConfig.cs" />
     <Compile Include="AutoMapper\AutoMapperProfile.cs" />
-    <Compile Include="Controllers\CadastroController.cs" />
     <Compile Include="Controllers\Cadastro\CadCidadeController.cs" />
     <Compile Include="Controllers\Cadastro\CadFornecedorController.cs" />
     <Compile Include="Controllers\Cadastro\CadGrupoProdutoController.cs" />
@@ -144,28 +143,70 @@
     <Compile Include="Controllers\ContaController.cs" />
     <Compile Include="Controllers\GraficoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\OperacaoController.cs" />
+    <Compile Include="Controllers\Operacao\OperEntradaProdutoController.cs" />
+    <Compile Include="Controllers\Operacao\OperEntradaSaidaProdutoController.cs" />
+    <Compile Include="Controllers\Operacao\OperInventarioController.cs" />
+    <Compile Include="Controllers\Operacao\OperLancamentoPerdaProdutoController.cs" />
+    <Compile Include="Controllers\Operacao\OperSaidaProdutoController.cs" />
     <Compile Include="Controllers\RelatorioController.cs" />
+    <Compile Include="Controllers\Relatorio\RelatPosicaoEstoqueController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CriptoHelper.cs" />
-    <Compile Include="Models\AlteracaoSenhaUsuarioViewModel.cs" />
-    <Compile Include="Models\CidadeModel.cs" />
-    <Compile Include="Models\EsqueciMinhaSenhaViewModel.cs" />
-    <Compile Include="Models\EstadoModel.cs" />
-    <Compile Include="Models\FornecedorModel.cs" />
-    <Compile Include="Models\GrupoProdutoModel.cs" />
-    <Compile Include="Models\LocalArmazenamentoModel.cs" />
-    <Compile Include="Models\MarcaProdutoModel.cs" />
-    <Compile Include="Models\NovaSenhaViewModel.cs" />
-    <Compile Include="Models\PaisModel.cs" />
-    <Compile Include="Models\PerfilModel.cs" />
-    <Compile Include="Models\ProdutoModel.cs" />
-    <Compile Include="Models\Tipos.cs" />
-    <Compile Include="Models\UnidadeMedidaModel.cs" />
-    <Compile Include="Models\UsuarioModel.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Binders\EntradaSaidaProdutoViewModelModelBinder.cs" />
+    <Compile Include="Models\ContextoBD.cs" />
+    <Compile Include="Models\Domain\CidadeModel.cs" />
+    <Compile Include="Models\Domain\EntradaProdutoModel.cs" />
+    <Compile Include="Models\Domain\EstadoModel.cs" />
+    <Compile Include="Models\Domain\FornecedorModel.cs" />
+    <Compile Include="Models\Domain\GrupoProdutoModel.cs" />
+    <Compile Include="Models\Domain\InventarioEstoqueModel.cs" />
+    <Compile Include="Models\Domain\LocalArmazenamentoModel.cs" />
+    <Compile Include="Models\Domain\MarcaProdutoModel.cs" />
+    <Compile Include="Models\Domain\PaisModel.cs" />
+    <Compile Include="Models\Domain\PerfilModel.cs" />
+    <Compile Include="Models\Domain\ProdutoModel.cs" />
+    <Compile Include="Models\Domain\SaidaProdutoModel.cs" />
+    <Compile Include="Models\Domain\Tipos.cs" />
+    <Compile Include="Models\Domain\UnidadeMedidaModel.cs" />
+    <Compile Include="Models\Domain\UsuarioModel.cs" />
+    <Compile Include="Models\Maps\CidadeMap.cs" />
+    <Compile Include="Models\Maps\EntradaProdutoMap.cs" />
+    <Compile Include="Models\Maps\EstadoMap.cs" />
+    <Compile Include="Models\Maps\FornecedorMap.cs" />
+    <Compile Include="Models\Maps\GrupoProdutoMap.cs" />
+    <Compile Include="Models\Maps\InventarioEstoqueMap.cs" />
+    <Compile Include="Models\Maps\LocalArmazenamentoMap.cs" />
+    <Compile Include="Models\Maps\MarcaProdutoMap.cs" />
+    <Compile Include="Models\Maps\PaisMap.cs" />
+    <Compile Include="Models\Maps\PerfilMap.cs" />
+    <Compile Include="Models\Maps\ProdutoMap.cs" />
+    <Compile Include="Models\Maps\SaidaProdutoMap.cs" />
+    <Compile Include="Models\Maps\UnidadeMedidaMap.cs" />
+    <Compile Include="Models\Maps\UsuarioMap.cs" />
+    <Compile Include="Models\ViewModel\AlteracaoSenhaUsuarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\CidadeViewModel.cs" />
+    <Compile Include="Models\ViewModel\EntradaSaidaProdutoViewModel.cs" />
+    <Compile Include="Models\ViewModel\EsqueciMinhaSenhaViewModel.cs" />
+    <Compile Include="Models\ViewModel\EstadoViewModel.cs" />
+    <Compile Include="Models\ViewModel\FornecedorViewModel.cs" />
+    <Compile Include="Models\ViewModel\GrupoProdutoViewModel.cs" />
+    <Compile Include="Models\ViewModel\InventarioComDiferencaViewModel.cs" />
+    <Compile Include="Models\ViewModel\ItemInventarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\LancamentoPerdaViewModel.cs" />
+    <Compile Include="Models\ViewModel\LocalArmazenamentoViewModel.cs" />
+    <Compile Include="Models\ViewModel\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModel\MarcaProdutoViewModel.cs" />
+    <Compile Include="Models\ViewModel\NovaSenhaViewModel.cs" />
+    <Compile Include="Models\ViewModel\PaisViewModel.cs" />
+    <Compile Include="Models\ViewModel\PerfilViewModel.cs" />
+    <Compile Include="Models\ViewModel\ProdutoComDiferencaEmInventarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\ProdutoInventarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\ProdutoViewModel.cs" />
+    <Compile Include="Models\ViewModel\RelatPosicaoEstoqueViewModel.cs" />
+    <Compile Include="Models\ViewModel\UnidadeMedidaViewModel.cs" />
+    <Compile Include="Models\ViewModel\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +234,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\ai.0.22.19-build00125.js" />
+    <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -212,6 +255,7 @@
     <Content Include="Scripts\Cadastro\Produto.js" />
     <Content Include="Scripts\Cadastro\UnidadeMedida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
+    <Content Include="Scripts\comum.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -226,8 +270,11 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\mustache.js" />
     <Content Include="Scripts\mustache.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sweetalert2.js" />
     <Content Include="Scripts\sweetalert2.min.js" />
+    <None Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -247,10 +294,6 @@
     <Content Include="Views\CadUsuario\Index.cshtml" />
     <Content Include="Views\Grafico\PerdaMes.cshtml" />
     <Content Include="Views\Grafico\EntradaSaidaMes.cshtml" />
-    <Content Include="Views\Operacao\EntradaEstoque.cshtml" />
-    <Content Include="Views\Operacao\SaidaEstoque.cshtml" />
-    <Content Include="Views\Operacao\Inventario.cshtml" />
-    <Content Include="Views\Operacao\LancPerdaProduto.cshtml" />
     <Content Include="Views\Relatorio\PosicaoEstoque.cshtml" />
     <Content Include="Views\Relatorio\Ressuprimento.cshtml" />
     <Content Include="Views\Conta\Login.cshtml" />
@@ -267,6 +310,10 @@
     <Content Include="Views\Conta\EsqueciMinhaSenha.cshtml" />
     <Content Include="Views\Conta\RedefinirSenha.cshtml" />
     <Content Include="Views\CadProduto\Index.cshtml" />
+    <Content Include="Views\OperEntradaProduto\Index.cshtml" />
+    <Content Include="Views\OperInventario\Index.cshtml" />
+    <Content Include="Views\OperLancamentoPerdaProduto\Index.cshtml" />
+    <Content Include="Views\OperSaidaProduto\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

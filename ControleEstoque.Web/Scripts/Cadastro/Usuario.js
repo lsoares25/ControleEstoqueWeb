@@ -35,4 +35,3 @@ function preencher_linha_grid(param, linha) {
         .eq(0).html(param.Nome).end()
         .eq(1).html(param.Login);
 }
-

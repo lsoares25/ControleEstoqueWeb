@@ -181,5 +181,5 @@ namespace ControleEstoque.Web.Controllers
 
             client.Send(mensagem);
         }
-    }        
+    }
 }

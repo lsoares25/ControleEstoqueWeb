@@ -5,7 +5,6 @@
     $('#cbx_ativo').prop('checked', dados.Ativo);
 }
 
-
 function set_focus_form() {
     $('#txt_nome').focus();
 }
@@ -20,7 +19,7 @@ function get_dados_inclusao() {
     return {
         Id: 0,
         Nome: '',
-        Sigla:'',
+        Sigla: '',
         Ativo: true
     };
 }

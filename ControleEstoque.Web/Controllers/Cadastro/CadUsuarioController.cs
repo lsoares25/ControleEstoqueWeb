@@ -1,30 +1,27 @@
-﻿using ControleEstoque.Web.Models;
+﻿using AutoMapper;
+using ControleEstoque.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Controllers
 {
     [Authorize(Roles = "Gerente")]
-
     public class CadUsuarioController : Controller
     {
-
         private const int _quantMaxLinhasPorPagina = 5;
         private const string _senhaPadrao = "{$127;$188}";
-                
+
         public ActionResult Index()
         {
-            
             ViewBag.SenhaPadrao = _senhaPadrao;
             ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = UsuarioModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
-            var quant = GrupoProdutoModel.RecuperarQuantidade();
+            var lista = Mapper.Map<List<UsuarioViewModel>>(UsuarioModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina));
+            var quant = UsuarioModel.RecuperarQuantidade();
 
             var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
@@ -32,11 +29,11 @@ namespace ControleEstoque.Web.Controllers
             return View(lista);
         }
 
-        [HttpPost]        
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult UsuarioPagina(int pagina, int tamPag)
+        public JsonResult UsuarioPagina(int pagina, int tamPag, string filtro, string ordem)
         {
-            var lista = UsuarioModel.RecuperarLista(pagina, tamPag);
+            var lista = Mapper.Map<List<UsuarioViewModel>>(UsuarioModel.RecuperarLista(pagina, tamPag, filtro, ordem));
 
             return Json(lista);
         }
@@ -45,7 +42,10 @@ namespace ControleEstoque.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RecuperarUsuario(int id)
         {
-            return Json(UsuarioModel.RecuperarPeloId(id));
+            var vm = Mapper.Map<UsuarioViewModel>(UsuarioModel.RecuperarPeloId(id));
+            vm.Senha = _senhaPadrao;
+
+            return Json(vm);
         }
 
         [HttpPost]
@@ -57,11 +57,12 @@ namespace ControleEstoque.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SalvarUsuario(UsuarioModel model)
+        public ActionResult SalvarUsuario(UsuarioViewModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
             var idSalvo = string.Empty;
+
             if (!ModelState.IsValid)
             {
                 resultado = "AVISO";
@@ -76,7 +77,8 @@ namespace ControleEstoque.Web.Controllers
                         model.Senha = "";
                     }
 
-                    var id = model.Salvar();
+                    var vm = Mapper.Map<UsuarioModel>(model);
+                    var id = vm.Salvar();
                     if (id > 0)
                     {
                         idSalvo = id.ToString();
@@ -90,11 +92,9 @@ namespace ControleEstoque.Web.Controllers
                 {
                     resultado = "ERRO";
                 }
-
             }
+
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
-
-
     }
 }

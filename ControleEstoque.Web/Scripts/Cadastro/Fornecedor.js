@@ -147,23 +147,23 @@ function preencher_linha_grid(param, linha) {
 }
 
 $(document)
-    .ready(function () {
-        $('#txt_telefone').mask('(00) 0000-0000');
-        $('#txt_cep').mask('00000-000');
-    })
-    .on('click', '#cbx_pessoa_juridica', function () {
-        $('label[for="txt_num_documento"]').text('CNPJ');
-        $('#txt_num_documento').mask('00.000.000/0000-00', { reverse: true });
-        $('#container_razao_social').removeClass('invisible');
-    })
-    .on('click', '#cbx_pessoa_fisica', function () {
-        $('label[for="txt_num_documento"]').text('CPF');
-        $('#txt_num_documento').mask('000.000.000-00', { reverse: true });
-        $('#container_razao_social').addClass('invisible');
-    })
-    .on('change', '#ddl_pais', function () {
-        mudar_pais();
-    })
-    .on('change', '#ddl_estado', function () {
-        mudar_estado();
-    });
+.ready(function () {
+    $('#txt_telefone').mask('(00) 0000-0000');
+    $('#txt_cep').mask('00000-000');
+})
+.on('click', '#cbx_pessoa_juridica', function () {
+    $('label[for="txt_num_documento"]').text('CNPJ');
+    $('#txt_num_documento').mask('00.000.000/0000-00', { reverse: true });
+    $('#container_razao_social').removeClass('invisible');
+})
+.on('click', '#cbx_pessoa_fisica', function () {
+    $('label[for="txt_num_documento"]').text('CPF');
+    $('#txt_num_documento').mask('000.000.000-00', { reverse: true });
+    $('#container_razao_social').addClass('invisible');
+})
+.on('change', '#ddl_pais', function () {
+    mudar_pais();
+})
+.on('change', '#ddl_estado', function () {
+    mudar_estado();
+});

@@ -1,16 +1,15 @@
-﻿using ControleEstoque.Web.Models;
+﻿using AutoMapper;
+using ControleEstoque.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace ControleEstoque.Web.Controllers.Cadastro
+namespace ControleEstoque.Web.Controllers
 {
     [Authorize(Roles = "Gerente,Administrativo,Operador")]
     public class CadFornecedorController : Controller
     {
-
         private const int _quantMaxLinhasPorPagina = 5;
 
         public ActionResult Index()
@@ -19,33 +18,31 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = FornecedorModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var lista = Mapper.Map<List<FornecedorViewModel>>(FornecedorModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina));
             var quant = FornecedorModel.RecuperarQuantidade();
 
             var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
-            ViewBag.Paises = PaisModel.RecuperarLista();
-           
+            ViewBag.Paises = Mapper.Map<List<PaisViewModel>>(PaisModel.RecuperarLista());
 
             return View(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult FornecedorPagina(int pagina, int tamPag, string filtro)
+        public JsonResult FornecedorPagina(int pagina, int tamPag, string filtro, string ordem)
         {
-            var lista = FornecedorModel.RecuperarLista(pagina, tamPag, filtro);
+            var lista = Mapper.Map<List<FornecedorViewModel>>(FornecedorModel.RecuperarLista(pagina, tamPag, filtro, ordem));
 
             return Json(lista);
         }
 
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult RecuperarFornecedor(int id)
         {
-            //throw new Exception(); codigo para forçar erro
-            return Json(FornecedorModel.RecuperarPeloId(id));
+            var vm = Mapper.Map<FornecedorViewModel>(FornecedorModel.RecuperarPeloId(id));
+            return Json(vm);
         }
 
         [HttpPost]
@@ -58,11 +55,12 @@ namespace ControleEstoque.Web.Controllers.Cadastro
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarFornecedor(FornecedorModel model)
+        public JsonResult SalvarFornecedor(FornecedorViewModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
             var idSalvo = string.Empty;
+
             if (!ModelState.IsValid)
             {
                 resultado = "AVISO";
@@ -72,7 +70,8 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             {
                 try
                 {
-                    var id = model.Salvar();
+                    var vm = Mapper.Map<FornecedorModel>(model);
+                    var id = vm.Salvar();
                     if (id > 0)
                     {
                         idSalvo = id.ToString();
@@ -86,11 +85,9 @@ namespace ControleEstoque.Web.Controllers.Cadastro
                 {
                     resultado = "ERRO";
                 }
-
             }
+
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
-
     }
-
 }

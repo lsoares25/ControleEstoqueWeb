@@ -95,27 +95,27 @@ function get_param() {
 }
 
 $(document)
-    .ready(function () {
-        $('#txt_preco_custo,#txt_preco_venda').mask('#.##0,00', { reverse: true });
-        $('#txt_quant_estoque').mask('00000');
+.ready(function () {
+    $('#txt_preco_custo,#txt_preco_venda').mask('#.##0,00', { reverse: true });
+    $('#txt_quant_estoque').mask('00000');
+})
+.on('click', '.btn-exibir-imagem', function () {
+    var nome_imagem = $(this).closest('tr').attr('data-imagem'),
+        modal_imagem = $('#modal_imagem'),
+        template_imagem = $('#template-imagem'),
+        conteudo_modal_imagem = Mustache.render(template_imagem.html(), { Imagem: nome_imagem });
+
+    modal_imagem.html(conteudo_modal_imagem);
+
+    bootbox.dialog({
+        title: `Imagem ${nome_imagem}`,
+        message: modal_imagem,
+        className: 'dialogo'
     })
-    .on('click', '.btn-exibir-imagem', function () {
-        var nome_imagem = $(this).closest('tr').attr('data-imagem'),
-            modal_imagem = $('#modal_imagem'),
-            template_imagem = $('#template-imagem'),
-            conteudo_modal_imagem = Mustache.render(template_imagem.html(), { Imagem: nome_imagem });
-
-        modal_imagem.html(conteudo_modal_imagem);
-
-        bootbox.dialog({
-            title: `Imagem ${nome_imagem}`,
-            message: modal_imagem,
-            className: 'dialogo'
-        })
-            .on('shown.bs.modal', function () {
-                modal_imagem.show();
-            })
-            .on('hidden.bs.modal', function () {
-                modal_imagem.hide().appendTo('body');
-            });
+    .on('shown.bs.modal', function () {
+        modal_imagem.show();
+    })
+    .on('hidden.bs.modal', function () {
+        modal_imagem.hide().appendTo('body');
     });
+});

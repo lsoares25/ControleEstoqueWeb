@@ -17,14 +17,8 @@
     }
 }
 
-
 function set_focus_form() {
     $('#txt_nome').focus();
-}
-
-function set_dados_grid(dados) {
-    return '<td>' + dados.Nome + '</td>' +
-        '<td>' + (dados.Ativo ? 'SIM' : 'NÃO') + '</td>';
 }
 
 function get_dados_inclusao() {
@@ -52,13 +46,16 @@ function preencher_linha_grid(param, linha) {
 
 function get_lista_usuarios_marcados() {
     var ids = [],
-    lista_usuario = $('#lista_usuario');
+        lista_usuario = $('#lista_usuario');
+
     lista_usuario.find('input[type=checkbox]').each(function (index, input) {
         var cbx = $(input),
             marcado = cbx.is(':checked');
+
         if (marcado) {
             ids.push(parseInt(cbx.attr('data-id-usuario')));
         }
     });
+
     return ids;
 }

@@ -1,11 +1,11 @@
-﻿using ControleEstoque.Web.Models;
+﻿using AutoMapper;
+using ControleEstoque.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace ControleEstoque.Web.Controllers.Cadastro
+namespace ControleEstoque.Web.Controllers
 {
     [Authorize(Roles = "Gerente,Administrativo,Operador")]
     public class CadLocalArmazenamentoController : Controller
@@ -18,7 +18,7 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = LocalArmazenamentoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var lista = Mapper.Map<List<LocalArmazenamentoViewModel>>(LocalArmazenamentoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina));
             var quant = LocalArmazenamentoModel.RecuperarQuantidade();
 
             var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
@@ -29,9 +29,9 @@ namespace ControleEstoque.Web.Controllers.Cadastro
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult LocalArmazenamentoPagina(int pagina, int tamPag)
+        public JsonResult LocalArmazenamentoPagina(int pagina, int tamPag, string filtro, string ordem)
         {
-            var lista = LocalArmazenamentoModel.RecuperarLista(pagina, tamPag);
+            var lista = Mapper.Map<List<LocalArmazenamentoViewModel>>(LocalArmazenamentoModel.RecuperarLista(pagina, tamPag, filtro, ordem));
 
             return Json(lista);
         }
@@ -40,7 +40,9 @@ namespace ControleEstoque.Web.Controllers.Cadastro
         [ValidateAntiForgeryToken]
         public JsonResult RecuperarLocalArmazenamento(int id)
         {
-            return Json(LocalArmazenamentoModel.RecuperarPeloId(id));
+            var vm = Mapper.Map<LocalArmazenamentoViewModel>(LocalArmazenamentoModel.RecuperarPeloId(id));
+
+            return Json(vm);
         }
 
         [HttpPost]
@@ -53,11 +55,12 @@ namespace ControleEstoque.Web.Controllers.Cadastro
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarLocalArmazenamento(LocalArmazenamentoModel model)
+        public JsonResult SalvarLocalArmazenamento(LocalArmazenamentoViewModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
             var idSalvo = string.Empty;
+
             if (!ModelState.IsValid)
             {
                 resultado = "AVISO";
@@ -67,7 +70,8 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             {
                 try
                 {
-                    var id = model.Salvar();
+                    var vm = Mapper.Map<LocalArmazenamentoModel>(model);
+                    var id = vm.Salvar();
                     if (id > 0)
                     {
                         idSalvo = id.ToString();
@@ -81,8 +85,8 @@ namespace ControleEstoque.Web.Controllers.Cadastro
                 {
                     resultado = "ERRO";
                 }
-
             }
+
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
     }
