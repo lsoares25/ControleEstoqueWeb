@@ -1,5 +1,5 @@
 ﻿using ControleEstoque.Web.Models;
-using Rotativa;
+//using Rotativa;
 using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Controllers
@@ -7,11 +7,11 @@ namespace ControleEstoque.Web.Controllers
     [Authorize(Roles = "Gerente,Administrativo,Operador")]
     public class RelatPosicaoEstoqueController : Controller
     {
-        public ActionResult Index()
-        {
-            var estoque = ProdutoModel.RecuperarRelatPosicaoEstoque();
+        //public ActionResult Index()
+        //{
+        //    var estoque = ProdutoModel.RecuperarRelatPosicaoEstoque();
 
-            return new ViewAsPdf("~/Views/Relatorio/RelatPosicaoEstoqueView.cshtml", estoque);
-        }
+        //    return new ViewAsPdf("~/Views/Relatorio/RelatPosicaoEstoqueView.cshtml", estoque);
+        //}
     }
 }
